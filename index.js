@@ -1,27 +1,79 @@
-// Instruções para entrega
-//  # 2️⃣ Calculadora de partidas Rankeadas
-// **O Que deve ser utilizado**
+let heroi = 'Oryon';
+let currentExp = 0;
+const totalExp = 10000;
+let jogando = true;
 
-// - Variáveis
-// - Operadores
-// - Laços de repetição
-// - Estruturas de decisões
-// - Funçõges
+function calculoGanhoPerdaXP(currentExp, jogada, limite){
+    if(jogada < 4){
+        const reducao = Math.round((currentExp-limite) * 0.1);
+        currentExp -= reducao;
+        currentExp = Math.max(currentExp, limite);
+    }else{
+        currentExp += 200;
+    }
+    return currentExp
+}
 
-// ## Objetivo:
+function statusAtual(xpAtual) {
+    let Nivel = "";
+  
+    if (xpAtual <= 1000) {
+      Nivel = "Ferro";
+    } else if (xpAtual <= 2000) {
+      Nivel = "Bronze";
+    } else if (xpAtual <= 5000) {
+      Nivel = "Prata";
+    } else if (xpAtual <= 7000) {
+      Nivel = "Ouro";
+    } else if (xpAtual <= 8000) {
+      Nivel = "Patina";
+    } else if (xpAtual <= 9000) {
+      Nivel = "Ascendente";
+    } else if (xpAtual <= 10000) {
+      Nivel = "Imortal";
+    } else {
+      Nivel = "Radiante";
+    }
+  
+    return Nivel;
+  }
 
-// Crie uma função que recebe como parâmetro a quantidade de vitórias e derrotas de um jogador,
-// depois disso retorne o resultado para uma variável, o saldo de Rankeadas deve ser feito através do calculo (vitórias - derrotas)
+function executeLoop() {
+  
+    process.stdout.clearLine(); // Limpa a linha anterior
+    process.stdout.cursorTo(0); // Move o cursor para a coluna 0
 
-// Se vitórias for menor do que 10 = Ferro
-// Se vitórias for entre 11 e 20 = Bronze
-// Se vitórias for entre 21 e 50 = Prata
-// Se vitórias for entre 51 e 80 = Ouro
-// Se vitórias for entre 81 e 90 = Diamante
-// Se vitórias for entre 91 e 100= Lendário
-// Se vitórias for maior ou igual a 101 = Imortal
+    let jogada = Math.floor(Math.random() * 11);
 
-// ## Saída
+    switch (jogando) {
+      case currentExp <= 1000:
+        currentExp = calculoGanhoPerdaXP(currentExp, jogada, limite=0)
+        break;
+      case currentExp < 2000:
+        currentExp = calculoGanhoPerdaXP(currentExp, jogada, limite=1000)
+        break;
+      case currentExp < 5000:
+        currentExp = calculoGanhoPerdaXP(currentExp, jogada, limite=2000)
+        break;
+      case currentExp < 7000:
+        currentExp = calculoGanhoPerdaXP(currentExp, jogada, limite=5000)
+        break;
+      case currentExp < 8000:
+        currentExp = calculoGanhoPerdaXP(currentExp, jogada, limite=7000)
+        break;
+      case currentExp < 9000:
+        currentExp = calculoGanhoPerdaXP(currentExp, jogada, limite=8000)
+        break;
+      case currentExp < 10000:
+        currentExp = calculoGanhoPerdaXP(currentExp, jogada, limite=9000)
+        break;
+      default:
+        currentExp = calculoGanhoPerdaXP(currentExp, jogada, limite=10000)
+    }
+    
+    process.stdout.write('O herói de nome ' + heroi + ' está no nivel ' + statusAtual(currentExp) + '. Progresso da XP ' + currentExp + '/' + totalExp);
 
-// Ao final deve se exibir uma mensagem:
-// "O Herói tem de saldo de **{saldoVitorias}** está no nível de **{nivel}**"
+    setTimeout(executeLoop, 1000);
+  
+}
+executeLoop()
