@@ -1,38 +1,33 @@
 let heroi = 'Oryon';
-let currentExp = 0;
-const totalExp = 10000;
-let jogando = true;
+let totalVitorias = 0;
+const jogando = true;
 
-function calculoGanhoPerdaXP(currentExp, jogada, limite){
-    if(jogada < 4){
-        const reducao = Math.round((currentExp-limite) * 0.1);
-        currentExp -= reducao;
-        currentExp = Math.max(currentExp, limite);
+function CalcularRanking(totalVitorias, jogada){
+    if(jogada <= 4){
+        totalVitorias = (totalVitorias - 1) <= 0 ? 0 : totalVitorias -= 1;
     }else{
-        currentExp += 200;
+        totalVitorias += 1;
     }
-    return currentExp
+    return totalVitorias;
 }
 
-function statusAtual(xpAtual) {
+function statusAtual(totalVitorias) {
     let Nivel = "";
   
-    if (xpAtual <= 1000) {
+    if (totalVitorias <= 10) {
       Nivel = "Ferro";
-    } else if (xpAtual <= 2000) {
+    } else if (totalVitorias <= 20) {
       Nivel = "Bronze";
-    } else if (xpAtual <= 5000) {
+    } else if (totalVitorias <= 50) {
       Nivel = "Prata";
-    } else if (xpAtual <= 7000) {
+    } else if (totalVitorias <= 80) {
       Nivel = "Ouro";
-    } else if (xpAtual <= 8000) {
-      Nivel = "Patina";
-    } else if (xpAtual <= 9000) {
-      Nivel = "Ascendente";
-    } else if (xpAtual <= 10000) {
-      Nivel = "Imortal";
+    } else if (totalVitorias <= 90) {
+      Nivel = "Diamante";
+    } else if (totalVitorias <= 100) {
+        Nivel = "Lendario";
     } else {
-      Nivel = "Radiante";
+      Nivel = "Imortal";
     }
   
     return Nivel;
@@ -40,40 +35,25 @@ function statusAtual(xpAtual) {
 
 function executeLoop() {
   
-    process.stdout.clearLine(); // Limpa a linha anterior
-    process.stdout.cursorTo(0); // Move o cursor para a coluna 0
-
-    let jogada = Math.floor(Math.random() * 11);
-
-    switch (jogando) {
-      case currentExp <= 1000:
-        currentExp = calculoGanhoPerdaXP(currentExp, jogada, limite=0)
-        break;
-      case currentExp < 2000:
-        currentExp = calculoGanhoPerdaXP(currentExp, jogada, limite=1000)
-        break;
-      case currentExp < 5000:
-        currentExp = calculoGanhoPerdaXP(currentExp, jogada, limite=2000)
-        break;
-      case currentExp < 7000:
-        currentExp = calculoGanhoPerdaXP(currentExp, jogada, limite=5000)
-        break;
-      case currentExp < 8000:
-        currentExp = calculoGanhoPerdaXP(currentExp, jogada, limite=7000)
-        break;
-      case currentExp < 9000:
-        currentExp = calculoGanhoPerdaXP(currentExp, jogada, limite=8000)
-        break;
-      case currentExp < 10000:
-        currentExp = calculoGanhoPerdaXP(currentExp, jogada, limite=9000)
-        break;
-      default:
-        currentExp = calculoGanhoPerdaXP(currentExp, jogada, limite=10000)
-    }
     
-    process.stdout.write('O herói de nome ' + heroi + ' está no nivel ' + statusAtual(currentExp) + '. Progresso da XP ' + currentExp + '/' + totalExp);
 
-    setTimeout(executeLoop, 1000);
-  
+        process.stdout.clearLine(); // Limpa a linha anterior
+        process.stdout.cursorTo(0); // Move o cursor para a coluna 0
+    
+        let jogada = Math.floor(Math.random() * 11);
+        totalVitorias = CalcularRanking(totalVitorias, jogada)
+       
+        
+        process.stdout.write('O herói tem o saldo de ' + totalVitorias + ' vitórias, está no nivel de ' + statusAtual(totalVitorias));
+    
+        if (totalVitorias >= 100) {
+            jogando = false; // Encerra o jogo se atingir mais de 100 vitórias
+        }
+        if (jogando) {
+            setTimeout(executeLoop, 1000);
+        }
+    
+
 }
-executeLoop()
+
+executeLoop();
